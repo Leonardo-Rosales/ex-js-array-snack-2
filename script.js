@@ -6,7 +6,7 @@ const books = [
       name: 'Alice',
       age: 35,
     },
-    available: false,
+    available: true,
     price: '101€',
     tags: ['advanced', 'js', 'react', 'senior'],
   },
@@ -17,7 +17,7 @@ const books = [
       name: 'Bob',
       age: 20,
     },
-    available: true,
+    available: false,
     price: '25€',
     tags: ['advanced', 'js', 'mid-senior'],
   },
@@ -101,3 +101,50 @@ console.log(agesSum);
 
 const agesAvg = agesSum / ages.length;
 console.log(agesAvg);
+
+//snack 5 (bonus)
+
+const ids = [2, 13, 7, 21, 19];
+
+async function getBooks(ids) {
+  const baseUrl = 'https://freetestapi.com/api/v1/books/';
+  const bookPromises = ids.map((id) =>
+    fetch(`${baseUrl}${id}`).then((res) => res.json())
+  );
+  const books = await Promise.all(bookPromises);
+
+  return books;
+}
+
+// getBooks(ids).then((books) => console.log(books));
+
+// snak 6 (bonus)
+
+const areThereAvailableBooks = books.some((book) => book.available);
+console.log(areThereAvailableBooks);
+
+const booksByPrice = [...books].sort((a, b) => {
+  const priceA = parseFloat(a.price.replace('€', ''));
+  const priceB = parseFloat(b.price.replace('€', ''));
+  return priceA - priceB;
+});
+
+console.log(booksByPrice);
+
+booksByPrice.sort((a, b) =>
+  a.available === b.available ? 0 : a.available ? -1 : 1
+);
+
+//snack 7 (bonus)
+
+const tagCounts = books.reduce((acc, book) => {
+  book.tags.forEach((tag) => {
+    if (!acc[tag]) {
+      acc[tag] = 0;
+    }
+    acc[tag]++;
+  });
+  return acc;
+}, {});
+
+console.log(tagCounts);
